@@ -1,0 +1,87 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+features:
+  - fullTextSearch
+dataSources:
+  - kind: ethereum
+    name: RafflFactory
+    network: matic
+    source:
+      abi: RafflFactory
+      address: "0x4c5d4e10e6a06ff4258acfa83e3b607b610a085d"
+      startBlock: 45684340
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - FeeCollectorChange
+        - FeePercentageChange
+        - OwnershipTransferStarted
+        - OwnershipTransferred
+        - RaffleCreated
+      abis:
+        - name: RafflFactory
+          file: ./abis/RafflFactory.json
+        - name: Raffl
+          file: ./abis/Raffl.json
+        - name: ERC20Metadata
+          file: ./abis/ERC20Metadata.json
+        - name: ERC721Metadata
+          file: ./abis/ERC721Metadata.json
+      eventHandlers:
+        - event: FeeCollectorChanged(indexed address)
+          handler: handleFeeCollectorChange
+        - event: FeeChanged(uint64,uint256)
+          handler: handleFeePercentageChange
+        - event: RafflFeeChanged(address)
+          handler: handleRaffleCustomFeeChange
+        - event: OwnershipTransferStarted(indexed address,indexed address)
+          handler: handleOwnershipTransferStarted
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: RaffleCreated(address)
+          handler: handleRaffleCreated
+      file: ./src/mappings/factory.ts
+templates:
+  - kind: ethereum/contract
+    name: Raffl
+    network: matic
+    source:
+      abi: Raffl
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - DeadlineFailedCriteria
+        - DeadlineSuccessCriteria
+        - DrawSuccess
+        - EntriesBought
+        - EntriesRefunded
+        - PrizesRefunded
+        - RaffleInitialized
+      abis:
+        - name: Raffl
+          file: ./abis/Raffl.json
+        - name: ERC20Metadata
+          file: ./abis/ERC20Metadata.json
+        - name: ERC721Metadata
+          file: ./abis/ERC721Metadata.json
+      eventHandlers:
+        - event: DeadlineFailedCriteria(uint256,uint256)
+          handler: handleDeadlineFailedCriteria
+        - event: DeadlineSuccessCriteria(uint256,uint256,uint256)
+          handler: handleDeadlineSuccessCriteria
+        - event: DrawSuccess(uint256,uint256,address,uint256)
+          handler: handleDrawSuccess
+        - event: EntriesBought(uint256,uint256)
+          handler: handleEntriesBought
+        - event: EntriesRefunded(uint256,uint256,address)
+          handler: handleEntriesRefunded
+        - event: PrizesRefunded()
+          handler: handlePrizesRefunded
+        - event: RaffleInitialized()
+          handler: handleRaffleInitialized
+      file: ./src/mappings/core.ts

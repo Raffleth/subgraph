@@ -1,0 +1,26 @@
+{
+  "name": "@raffl/subgraph",
+  "author": {
+    "name": "JA <@ubinatus>"
+  },
+  "license": "GPL-3.0-or-later",
+  "version": "1.0.0",
+  "description": "Raffl Subgraph",
+  "repository": "https://github.com/raffleth/subgraph",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "codegen": "graph codegen --output-dir src/types/",
+    "build:polygon": "graph build --network matic",
+    "deploy:polygon": "pnpm build:polygon && graph deploy --node https://api.thegraph.com/deploy/ raffleth/raffl-polygon"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.53.0",
+    "@graphprotocol/graph-ts": "^0.31.0",
+    "@typescript-eslint/eslint-plugin": "^6.2.1",
+    "@typescript-eslint/parser": "^6.2.1",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^8.9.0",
+    "matchstick-as": "^0.5.2",
+    "typescript": "^5.1.6"
+  }
+}
