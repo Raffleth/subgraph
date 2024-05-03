@@ -1,0 +1,351 @@
+[
+  {
+    "type": "constructor",
+    "inputs": [
+      { "name": "implementationAddress", "type": "address", "internalType": "address" },
+      { "name": "feeCollectorAddress", "type": "address", "internalType": "address" },
+      { "name": "feePercentageValue", "type": "uint64", "internalType": "uint64" },
+      { "name": "feePenalityValue", "type": "uint256", "internalType": "uint256" },
+      { "name": "vrfCoordinator", "type": "address", "internalType": "address" },
+      { "name": "_keyHash", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "_subscriptionId", "type": "uint256", "internalType": "uint256" }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  { "type": "function", "name": "acceptOwnership", "inputs": [], "outputs": [], "stateMutability": "nonpayable" },
+  {
+    "type": "function",
+    "name": "activeRaffles",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct RafflFactory.ActiveRaffle[]",
+        "components": [
+          { "name": "raffle", "type": "address", "internalType": "address" },
+          { "name": "deadline", "type": "uint256", "internalType": "uint256" }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "checkUpkeep",
+    "inputs": [{ "name": "checkData", "type": "bytes", "internalType": "bytes" }],
+    "outputs": [
+      { "name": "upkeepNeeded", "type": "bool", "internalType": "bool" },
+      { "name": "performData", "type": "bytes", "internalType": "bytes" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "createRaffle",
+    "inputs": [
+      { "name": "entryToken", "type": "address", "internalType": "address" },
+      { "name": "entryPrice", "type": "uint256", "internalType": "uint256" },
+      { "name": "minEntries", "type": "uint256", "internalType": "uint256" },
+      { "name": "deadline", "type": "uint256", "internalType": "uint256" },
+      {
+        "name": "prizes",
+        "type": "tuple[]",
+        "internalType": "struct IRaffl.Prize[]",
+        "components": [
+          { "name": "asset", "type": "address", "internalType": "address" },
+          { "name": "assetType", "type": "uint8", "internalType": "enum IRaffl.AssetType" },
+          { "name": "value", "type": "uint256", "internalType": "uint256" }
+        ]
+      },
+      {
+        "name": "tokenGates",
+        "type": "tuple[]",
+        "internalType": "struct IRaffl.TokenGate[]",
+        "components": [
+          { "name": "token", "type": "address", "internalType": "address" },
+          { "name": "amount", "type": "uint256", "internalType": "uint256" }
+        ]
+      },
+      {
+        "name": "extraRecipient",
+        "type": "tuple",
+        "internalType": "struct IRaffl.ExtraRecipient",
+        "components": [
+          { "name": "recipient", "type": "address", "internalType": "address" },
+          { "name": "sharePercentage", "type": "uint64", "internalType": "uint64" }
+        ]
+      }
+    ],
+    "outputs": [{ "name": "raffle", "type": "address", "internalType": "address" }],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "customFees",
+    "inputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "outputs": [
+      { "name": "enabled", "type": "bool", "internalType": "bool" },
+      { "name": "feePercentage", "type": "uint64", "internalType": "uint64" }
+    ],
+    "stateMutability": "view"
+  },
+  { "type": "function", "name": "executeFeeChange", "inputs": [], "outputs": [], "stateMutability": "nonpayable" },
+  {
+    "type": "function",
+    "name": "feeCollector",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "feeData",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct IFeeManager.FeeData",
+        "components": [
+          { "name": "feeCollector", "type": "address", "internalType": "address" },
+          { "name": "feePercentage", "type": "uint64", "internalType": "uint64" },
+          { "name": "feePenality", "type": "uint256", "internalType": "uint256" }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "feePenality",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "feePercentage",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint64", "internalType": "uint64" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "handleSubscription",
+    "inputs": [
+      { "name": "_subscriptionId", "type": "uint64", "internalType": "uint64" },
+      { "name": "_keyHash", "type": "bytes32", "internalType": "bytes32" },
+      { "name": "_callbackGasLimit", "type": "uint32", "internalType": "uint32" },
+      { "name": "_requestConfirmations", "type": "uint16", "internalType": "uint16" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "implementation",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "maxFee",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint64", "internalType": "uint64" }],
+    "stateMutability": "pure"
+  },
+  { "type": "function", "name": "nextSalt", "inputs": [], "outputs": [], "stateMutability": "nonpayable" },
+  {
+    "type": "function",
+    "name": "owner",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "performUpkeep",
+    "inputs": [{ "name": "performData", "type": "bytes", "internalType": "bytes" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "proposeFeeChange",
+    "inputs": [
+      { "name": "newFeePercentage", "type": "uint64", "internalType": "uint64" },
+      { "name": "newFeePenality", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "proposedFee",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct RafflFactory.ProposedFee",
+        "components": [
+          { "name": "feePercentage", "type": "uint64", "internalType": "uint64" },
+          { "name": "feePenality", "type": "uint256", "internalType": "uint256" },
+          { "name": "validFrom", "type": "uint64", "internalType": "uint64" }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "rawFulfillRandomWords",
+    "inputs": [
+      { "name": "requestId", "type": "uint256", "internalType": "uint256" },
+      { "name": "randomWords", "type": "uint256[]", "internalType": "uint256[]" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "s_vrfCoordinator",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "contract IVRFCoordinatorV2Plus" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "setCoordinator",
+    "inputs": [{ "name": "_vrfCoordinator", "type": "address", "internalType": "address" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setFeeCollector",
+    "inputs": [{ "name": "newFeeCollector", "type": "address", "internalType": "address" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setRafflFee",
+    "inputs": [
+      { "name": "raffles", "type": "address[]", "internalType": "address[]" },
+      { "name": "enabled", "type": "bool", "internalType": "bool" },
+      { "name": "fee", "type": "uint64", "internalType": "uint64" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "subscriptionId",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "transferOwnership",
+    "inputs": [{ "name": "to", "type": "address", "internalType": "address" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "CoordinatorSet",
+    "inputs": [{ "name": "vrfCoordinator", "type": "address", "indexed": false, "internalType": "address" }],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "FeeChanged",
+    "inputs": [
+      { "name": "feePercentage", "type": "uint64", "indexed": false, "internalType": "uint64" },
+      { "name": "feePenality", "type": "uint256", "indexed": false, "internalType": "uint256" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "FeeCollectorChanged",
+    "inputs": [{ "name": "feeCollector", "type": "address", "indexed": true, "internalType": "address" }],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "FeeProposal",
+    "inputs": [
+      { "name": "feePercentage", "type": "uint64", "indexed": false, "internalType": "uint64" },
+      { "name": "feePenality", "type": "uint256", "indexed": false, "internalType": "uint256" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "OwnershipTransferRequested",
+    "inputs": [
+      { "name": "from", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "to", "type": "address", "indexed": true, "internalType": "address" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "OwnershipTransferred",
+    "inputs": [
+      { "name": "from", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "to", "type": "address", "indexed": true, "internalType": "address" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RafflFeeChanged",
+    "inputs": [{ "name": "raffle", "type": "address", "indexed": false, "internalType": "address" }],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RaffleCreated",
+    "inputs": [{ "name": "raffle", "type": "address", "indexed": false, "internalType": "address" }],
+    "anonymous": false
+  },
+  { "type": "error", "name": "ActiveRaffleIndexOutOfBounds", "inputs": [] },
+  { "type": "error", "name": "AddressCanNotBeZero", "inputs": [] },
+  { "type": "error", "name": "DeadlineIsNotFuture", "inputs": [] },
+  { "type": "error", "name": "ERC20PrizeAmountIsZero", "inputs": [] },
+  { "type": "error", "name": "FailedToDeploy", "inputs": [] },
+  { "type": "error", "name": "FeeAlreadySet", "inputs": [] },
+  { "type": "error", "name": "FeeOutOfRange", "inputs": [] },
+  { "type": "error", "name": "InvalidLowerAndUpperBounds", "inputs": [] },
+  { "type": "error", "name": "NoActiveRaffles", "inputs": [] },
+  { "type": "error", "name": "NotARaffle", "inputs": [] },
+  { "type": "error", "name": "NotFeeCollector", "inputs": [] },
+  {
+    "type": "error",
+    "name": "OnlyCoordinatorCanFulfill",
+    "inputs": [
+      { "name": "have", "type": "address", "internalType": "address" },
+      { "name": "want", "type": "address", "internalType": "address" }
+    ]
+  },
+  {
+    "type": "error",
+    "name": "OnlyOwnerOrCoordinator",
+    "inputs": [
+      { "name": "have", "type": "address", "internalType": "address" },
+      { "name": "owner", "type": "address", "internalType": "address" },
+      { "name": "coordinator", "type": "address", "internalType": "address" }
+    ]
+  },
+  { "type": "error", "name": "PrizesIsEmpty", "inputs": [] },
+  { "type": "error", "name": "ProposalNotReady", "inputs": [] },
+  { "type": "error", "name": "UnsuccessfulTransferFromPrize", "inputs": [] },
+  { "type": "error", "name": "UpkeepConditionNotMet", "inputs": [] },
+  { "type": "error", "name": "ZeroAddress", "inputs": [] }
+]

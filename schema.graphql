@@ -1,0 +1,238 @@
+type _Schema_
+  @fulltext(
+    name: "raffleSearch"
+    language: en
+    algorithm: rank
+    include: [{ entity: "Raffle", fields: [{ name: "tags" }] }]
+  )
+# # # # # # # # # # # # # # # # # #
+# Main entities
+# # # # # # # # # # # # # # # # # #
+type Raffle @entity {
+  id: Bytes! # address
+  # Tags for the prizes symbols
+  tags: String!
+  # Entries
+  entryToken: Asset
+  entryPrice: BigInt!
+  minEntries: BigInt!
+  # Prizes
+  prizes: [Prize!]! @derivedFrom(field: "raffle")
+  # Participants
+  creator: User!
+  participantsCount: Int!
+  participants: [RaffleParticipation!]! @derivedFrom(field: "raffle")
+  # Entries
+  entriesCount: Int!
+  entries: [Entry!]! @derivedFrom(field: "raffle")
+  # Deadline
+  deadline: BigInt!
+  # State
+  status: Int
+  result: Draw @derivedFrom(field: "raffle")
+  # TokenGates
+  tokenGates: [TokenGate!]! @derivedFrom(field: "raffle")
+  # Refund
+  prizesRefunded: PrizesRefunded @derivedFrom(field: "raffle")
+  entriesRefunded: [EntriesRefunded!]! @derivedFrom(field: "raffle")
+  # Fee
+  customFee: BigInt # uint64
+  # Tx info
+  inception: BigInt!
+  creation: RaffleCreated!
+}
+
+type User @entity {
+  id: Bytes! #address
+  rafflesCreated: [Raffle!]! @derivedFrom(field: "creator")
+  rafflesParticipated: [RaffleParticipation!] @derivedFrom(field: "user")
+  rafflesRefunded: [EntriesRefunded!]! @derivedFrom(field: "user")
+  winDraws: [Draw!]! @derivedFrom(field: "winner")
+  entries: [Entry!]! @derivedFrom(field: "user")
+}
+
+type RaffleParticipation @entity {
+  id: Bytes! # Set to `raffle.id.concat(user.id)`
+  raffle: Raffle!
+  user: User!
+  entries: Int!
+  blockTimestamp: BigInt!
+}
+
+type Prize @entity(immutable: true) {
+  id: String!
+  raffle: Raffle!
+  asset: Asset!
+  value: BigInt! # Amount if ERC20. TokenId if ERC721
+  uri: String # Ommited if ERC20
+}
+
+type Asset @entity(immutable: true) {
+  id: Bytes! # address
+  type: Int! # 1 if ERC20; 2 if ERC721
+  # Metadata
+  name: String!
+  symbol: String!
+  decimals: Int!
+  # Relations
+  prizes: [Prize!] @derivedFrom(field: "asset")
+  tokenGates: [TokenGate!] @derivedFrom(field: "asset")
+  raffleEntry: [Raffle!] @derivedFrom(field: "entryToken")
+}
+
+type Entry @entity {
+  id: Bytes!
+  raffle: Raffle!
+  user: User!
+  quantity: BigInt!
+  total: BigInt!
+
+  # Tx info
+  boughtEvent: EntriesBought!
+}
+
+type Draw @entity {
+  id: Bytes!
+  raffle: Raffle!
+  winner: User!
+
+  # Tx info
+  drawSuccess: DrawSuccess!
+}
+
+type TokenGate @entity {
+  id: String!
+  raffle: Raffle!
+  asset: Asset!
+  value: BigInt! # Amount if ERC20. TokenId if ERC721
+}
+
+# # # # # # # # # # # # # # # # # #
+# RafflFactory.sol EVENTS
+# # # # # # # # # # # # # # # # # #
+type FeeCollectorChange @entity(immutable: true) {
+  id: Bytes!
+  feeCollector: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type FeePercentageChange @entity(immutable: true) {
+  id: Bytes!
+  feePercentage: BigInt! # uint64
+  feePenality: BigInt! # uint64
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RaffleCustomFee @entity(immutable: true) {
+  id: Bytes!
+  raffle: Raffle!
+  enabled: Boolean!
+  feePercentage: BigInt! # uint64
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferRequested @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RaffleCreated @entity(immutable: true) {
+  id: Bytes!
+  raffle: Raffle! @derivedFrom(field: "creation")
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+# # # # # # # # # # # # # # # # # #
+# Raffl.sol EVENTS
+# # # # # # # # # # # # # # # # # #
+type DeadlineFailedCriteria @entity(immutable: true) {
+  id: Bytes!
+  raffle: Raffle!
+  entries: BigInt! # uint256
+  minEntries: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type DeadlineSuccessCriteria @entity(immutable: true) {
+  id: Bytes!
+  raffle: Raffle!
+  requestId: BigInt! # uint256
+  entries: BigInt! # uint256
+  minEntries: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type DrawSuccess @entity(immutable: true) {
+  id: Bytes!
+  raffle: Raffle!
+  requestId: BigInt! # uint256
+  winnerEntry: BigInt! # uint256
+  user: User!
+  entries: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EntriesBought @entity(immutable: true) {
+  id: Bytes!
+  raffle: Raffle!
+  entriesBought: BigInt! # uint256
+  value: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EntriesRefunded @entity(immutable: true) {
+  id: Bytes!
+  raffle: Raffle!
+  entriesRefunded: BigInt! # uint256
+  value: BigInt! # uint256
+  user: User!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PrizesRefunded @entity(immutable: true) {
+  id: Bytes!
+  raffle: Raffle!
+  user: User!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RaffleInitialized @entity(immutable: true) {
+  id: Bytes!
+
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

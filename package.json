@@ -1,0 +1,27 @@
+{
+  "name": "@raffl/subgraph",
+  "author": {
+    "name": "JA <@ubinatus>",
+    "email": "ja@raffl.xyz",
+    "url": "https://raffl.xyz"
+  },
+  "license": "GPL-3.0-or-later",
+  "version": "1.0.0",
+  "description": "Raffl Subgraph",
+  "repository": "https://github.com/raffleth/subgraph",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "codegen": "graph codegen --output-dir src/types/",
+    "build:sepolia": "graph build --network sepolia",
+    "deploy:sepolia": "pnpm build:sepolia && graph deploy --studio raffl-v1-sepolia"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.71.1",
+    "@graphprotocol/graph-ts": "^0.35.1",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "eslint": "^9.1.1",
+    "eslint-config-prettier": "^9.1.0",
+    "matchstick-as": "^0.6.0"
+  }
+}
