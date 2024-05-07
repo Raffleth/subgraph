@@ -2,6 +2,13 @@
   { "type": "constructor", "inputs": [], "stateMutability": "nonpayable" },
   {
     "type": "function",
+    "name": "balanceOf",
+    "inputs": [{ "name": "owner", "type": "address", "internalType": "address" }],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "buyEntries",
     "inputs": [{ "name": "quantity", "type": "uint256", "internalType": "uint256" }],
     "outputs": [],
@@ -47,20 +54,6 @@
   },
   {
     "type": "function",
-    "name": "entries",
-    "inputs": [],
-    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "entriesMap",
-    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
-    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "entryPrice",
     "inputs": [],
     "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
@@ -92,27 +85,27 @@
   },
   {
     "type": "function",
-    "name": "feeData",
+    "name": "gameStatus",
     "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "tuple",
-        "internalType": "struct IFeeManager.FeeData",
-        "components": [
-          { "name": "feeCollector", "type": "address", "internalType": "address" },
-          { "name": "feePercentage", "type": "uint64", "internalType": "uint64" },
-          { "name": "feePenality", "type": "uint256", "internalType": "uint256" }
-        ]
-      }
-    ],
+    "outputs": [{ "name": "", "type": "uint8", "internalType": "enum IRaffl.GameStatus" }],
     "stateMutability": "view"
   },
   {
     "type": "function",
-    "name": "gameStatus",
+    "name": "getPrizes",
     "inputs": [],
-    "outputs": [{ "name": "", "type": "uint8", "internalType": "enum IRaffl.GameStatus" }],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct IRaffl.Prize[]",
+        "components": [
+          { "name": "asset", "type": "address", "internalType": "address" },
+          { "name": "assetType", "type": "uint8", "internalType": "enum IRaffl.AssetType" },
+          { "name": "value", "type": "uint256", "internalType": "uint256" }
+        ]
+      }
+    ],
     "stateMutability": "view"
   },
   {
@@ -172,9 +165,26 @@
   },
   {
     "type": "function",
+    "name": "ownerOf",
+    "inputs": [{ "name": "entryId", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "pool",
     "inputs": [],
     "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "poolFeeData",
+    "inputs": [],
+    "outputs": [
+      { "name": "", "type": "address", "internalType": "address" },
+      { "name": "", "type": "uint64", "internalType": "uint64" }
+    ],
     "stateMutability": "view"
   },
   {
@@ -230,6 +240,13 @@
   },
   {
     "type": "function",
+    "name": "totalEntries",
+    "inputs": [],
+    "outputs": [{ "name": "result", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "upkeepPerformed",
     "inputs": [],
     "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
@@ -237,9 +254,9 @@
   },
   {
     "type": "function",
-    "name": "userEntriesMap",
+    "name": "userRefund",
     "inputs": [{ "name": "", "type": "address", "internalType": "address" }],
-    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
     "stateMutability": "view"
   },
   {
@@ -301,19 +318,22 @@
   { "type": "event", "name": "PrizesRefunded", "inputs": [], "anonymous": false },
   { "type": "event", "name": "RaffleInitialized", "inputs": [], "anonymous": false },
   { "type": "event", "name": "TokenGatingChanges", "inputs": [], "anonymous": false },
+  { "type": "error", "name": "BalanceQueryForZeroAddress", "inputs": [] },
   { "type": "error", "name": "EntriesPurchaseClosed", "inputs": [] },
   { "type": "error", "name": "EntriesPurchaseInvalidValue", "inputs": [] },
   { "type": "error", "name": "EntryQuantityRequired", "inputs": [] },
   { "type": "error", "name": "InvalidInitialization", "inputs": [] },
-  { "type": "error", "name": "MaxEntriesReached", "inputs": [] },
+  { "type": "error", "name": "MaxTotalEntriesReached", "inputs": [] },
+  { "type": "error", "name": "MaxUserEntriesReached", "inputs": [] },
   { "type": "error", "name": "NotInitializing", "inputs": [] },
   { "type": "error", "name": "OnlyCreatorAllowed", "inputs": [] },
   { "type": "error", "name": "OnlyFactoryAllowed", "inputs": [] },
+  { "type": "error", "name": "OwnerQueryForNonexistentEntry", "inputs": [] },
   { "type": "error", "name": "PrizesAlreadyRefunded", "inputs": [] },
   { "type": "error", "name": "ReentrancyGuardReentrantCall", "inputs": [] },
-  { "type": "error", "name": "RefundPenalityRequired", "inputs": [] },
   { "type": "error", "name": "RefundsOnlyAllowedOnFailedDraw", "inputs": [] },
   { "type": "error", "name": "TokenGateRestriction", "inputs": [] },
+  { "type": "error", "name": "UserAlreadyRefunded", "inputs": [] },
   { "type": "error", "name": "UserWithoutEntries", "inputs": [] },
   { "type": "error", "name": "WithoutRefunds", "inputs": [] }
 ]

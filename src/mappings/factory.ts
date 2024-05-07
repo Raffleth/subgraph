@@ -3,31 +3,37 @@ import { Address, BigInt } from '@graphprotocol/graph-ts'
 import { ERC721Metadata as ERC721MetadataContract } from '../types/RafflFactory/ERC721Metadata'
 import { Raffl as RaflContract } from '../types/RafflFactory/Raffl'
 import {
-  FeeChanged as FeeChangedEvent,
-  FeeCollectorChanged as FeeCollectorChangedEvent,
+  FeeCollectorChange as FeeCollectorChangeEvent,
+  GlobalCreationFeeChange as GlobalCreationFeeChangeEvent,
+  GlobalPoolFeeChange as GlobalPoolFeeChangeEvent,
+  CustomCreationFeeChange as CustomCreationFeeChangeEvent,
+  CustomCreationFeeToggle as CustomCreationFeeToggleEvent,
+  CustomPoolFeeChange as CustomPoolFeeChangeEvent,
+  CustomPoolFeeToggle as CustomPoolFeeToggleEvent,
   OwnershipTransferred as OwnershipTransferredEvent,
   OwnershipTransferRequested as OwnershipTransferRequestedEvent,
   RaffleCreated as RaffleCreatedEvent,
-  RafflFactory as RafflFactoryContract,
-  RafflFeeChanged as RafflFeeChangedEvent
 } from '../types/RafflFactory/RafflFactory'
 import {
   FeeCollectorChange,
-  FeePercentageChange,
+  GlobalCreationFeeChange,
+  GlobalPoolFeeChange,
+  CustomCreationFeeChange,
+  CustomCreationFeeToggle,
+  CustomPoolFeeChange,
+  CustomPoolFeeToggle,
   OwnershipTransferred,
   OwnershipTransferRequested,
   Prize,
   Raffle,
   RaffleCreated,
-  RaffleCustomFee
 } from '../types/schema'
 import { Raffl as NewRaffl } from '../types/templates'
 import { ensureAsset } from '../utils/asset'
-import { getRaffleCustomFee } from '../utils/fee'
 import { setTokenGate } from '../utils/token-gate'
 import { ensureUser } from '../utils/user'
 
-export function handleFeeCollectorChange(event: FeeCollectorChangedEvent): void {
+export function handleFeeCollectorChange(event: FeeCollectorChangeEvent): void {
   const entity = new FeeCollectorChange(event.transaction.hash.concatI32(event.logIndex.toI32()))
   entity.feeCollector = event.params.feeCollector
 
@@ -38,11 +44,10 @@ export function handleFeeCollectorChange(event: FeeCollectorChangedEvent): void 
   entity.save()
 }
 
-export function handleFeePercentageChange(event: FeeChangedEvent): void {
-  const entity = new FeePercentageChange(event.transaction.hash.concatI32(event.logIndex.toI32()))
-  entity.feePercentage = event.params.feePercentage
-  entity.feePenality = event.params.feePenality
-
+export function handleGlobalCreationFeeChange(event: GlobalCreationFeeChangeEvent): void {
+  const entity = new GlobalCreationFeeChange(event.transaction.hash.concatI32(event.logIndex.toI32()))
+  entity.newValue = event.params.creationFeeValue
+  entity.validSince = event.block.timestamp.plus(BigInt.fromI32(3600))
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
@@ -50,33 +55,58 @@ export function handleFeePercentageChange(event: FeeChangedEvent): void {
   entity.save()
 }
 
-export function handleRaffleCustomFeeChange(event: RafflFeeChangedEvent): void {
-  const raffleFactoryContract = RafflFactoryContract.bind(event.address)
-  const globalFeeData = raffleFactoryContract.try_feeData()
-  const raffleContract = RaflContract.bind(event.params.raffle)
-  const raffleFeeData = raffleContract.try_feeData()
+export function handleGlobalPoolFeeChange(event: GlobalPoolFeeChangeEvent): void {
+  const entity = new GlobalPoolFeeChange(event.transaction.hash.concatI32(event.logIndex.toI32()))
+  entity.newValue = event.params.poolFeePercentage
+  entity.validSince = event.block.timestamp.plus(BigInt.fromI32(3600))
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+  entity.save()
+}
 
-  if (!globalFeeData.reverted && !raffleFeeData.reverted) {
-    // Save RaffleCustomFee entity
-    const entity = new RaffleCustomFee(event.transaction.hash.concatI32(event.logIndex.toI32()))
-    entity.raffle = event.params.raffle
-    const enabled = globalFeeData.value.feePercentage.notEqual(raffleFeeData.value.feePercentage)
-    entity.enabled = enabled
-    entity.feePercentage = raffleFeeData.value.feePercentage
+export function handleCustomCreationFeeChange(event: CustomCreationFeeChangeEvent): void {
+  const entity = new CustomCreationFeeChange(event.transaction.hash.concatI32(event.logIndex.toI32()))
+  entity.newValue = event.params.creationFeeValue
+  entity.user = event.params.user
+  entity.validSince = event.block.timestamp.plus(BigInt.fromI32(3600))
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+  entity.save()
+}
 
-    entity.blockNumber = event.block.number
-    entity.blockTimestamp = event.block.timestamp
-    entity.transactionHash = event.transaction.hash
+export function handleCustomCreationFeeToggle(event: CustomCreationFeeToggleEvent): void {
+  const entity = new CustomCreationFeeToggle(event.transaction.hash.concatI32(event.logIndex.toI32()))
+  entity.newState = event.params.enable
+  entity.user = event.params.user
+  entity.validSince = event.block.timestamp.plus(BigInt.fromI32(3600))
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+  entity.save()
+}
 
-    entity.save()
+export function handleCustomPoolFeeChange(event: CustomPoolFeeChangeEvent): void {
+  const entity = new CustomPoolFeeChange(event.transaction.hash.concatI32(event.logIndex.toI32()))
+  entity.newValue = event.params.poolFeePercentage
+  entity.user = event.params.user
+  entity.validSince = event.block.timestamp.plus(BigInt.fromI32(3600))
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+  entity.save()
+}
 
-    // Update Raffle fee
-    const raffle = Raffle.load(event.params.raffle)
-    if (raffle) {
-      raffle.customFee = enabled ? raffleFeeData.value.feePercentage : null
-      raffle.save()
-    }
-  }
+export function handleCustomPoolFeeToggle(event: CustomPoolFeeToggleEvent): void {
+  const entity = new CustomPoolFeeToggle(event.transaction.hash.concatI32(event.logIndex.toI32()))
+  entity.newState = event.params.enable
+  entity.user = event.params.user
+  entity.validSince = event.block.timestamp.plus(BigInt.fromI32(3600))
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+  entity.save()
 }
 
 export function handleOwnershipTransferRequested(event: OwnershipTransferRequestedEvent): void {
@@ -125,7 +155,6 @@ export function handleRaffleCreated(event: RaffleCreatedEvent): void {
   raffle.status = raffleContract.gameStatus()
   raffle.creation = creationEntity.id
   raffle.tags = ''
-  raffle.customFee = getRaffleCustomFee(event.params.raffle)
   raffle.inception = event.block.timestamp
   raffle.save()
 

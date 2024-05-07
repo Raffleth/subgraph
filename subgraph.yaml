@@ -9,18 +9,24 @@ dataSources:
     network: sepolia
     source:
       abi: RafflFactory
-      address: "0xb2517f68553c7350eebd85c61a03f42815deff85"
-      startBlock: 5825997
+      address: "0xa0e52B7A4151C3904c7aA1A7531c6E7045E7CdfE"
+      startBlock: 5852043
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - FeeCollectorChange
-        - FeePercentageChange
+        - GlobalCreationFeeChange
+        - GlobalPoolFeeChange
+        - CustomCreationFeeChange
+        - CustomCreationFeeToggle
+        - CustomPoolFeeChange
+        - CustomPoolFeeToggle
         - OwnershipTransferRequested
         - OwnershipTransferred
         - RaffleCreated
+        - Raffl
       abis:
         - name: RafflFactory
           file: ./abis/RafflFactory.json
@@ -31,12 +37,20 @@ dataSources:
         - name: ERC721Metadata
           file: ./abis/ERC721Metadata.json
       eventHandlers:
-        - event: FeeCollectorChanged(indexed address)
+        - event: FeeCollectorChange(indexed address)
           handler: handleFeeCollectorChange
-        - event: FeeChanged(uint64,uint256)
-          handler: handleFeePercentageChange
-        - event: RafflFeeChanged(address)
-          handler: handleRaffleCustomFeeChange
+        - event: GlobalCreationFeeChange(uint64)
+          handler: handleGlobalCreationFeeChange
+        - event: GlobalPoolFeeChange(uint64)
+          handler: handleGlobalPoolFeeChange
+        - event: CustomCreationFeeChange(indexed address,uint64)
+          handler: handleCustomCreationFeeChange
+        - event: CustomCreationFeeToggle(indexed address,bool)
+          handler: handleCustomCreationFeeToggle
+        - event: CustomPoolFeeChange(indexed address,uint64)
+          handler: handleCustomPoolFeeChange
+        - event: CustomPoolFeeToggle(indexed address,bool)
+          handler: handleCustomPoolFeeToggle
         - event: OwnershipTransferRequested(indexed address,indexed address)
           handler: handleOwnershipTransferRequested
         - event: OwnershipTransferred(indexed address,indexed address)

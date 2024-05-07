@@ -1,8 +1,8 @@
 {
   "sepolia": {
     "RafflFactory": {
-      "address": "0xb2517f68553c7350eebd85c61a03f42815deff85",
-      "startBlock": 5825997
+      "address": "0xa0e52B7A4151C3904c7aA1A7531c6E7045E7CdfE",
+      "startBlock": 5852043
     }
   }
 }

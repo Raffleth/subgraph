@@ -35,8 +35,6 @@ type Raffle @entity {
   # Refund
   prizesRefunded: PrizesRefunded @derivedFrom(field: "raffle")
   entriesRefunded: [EntriesRefunded!]! @derivedFrom(field: "raffle")
-  # Fee
-  customFee: BigInt # uint64
   # Tx info
   inception: BigInt!
   creation: RaffleCreated!
@@ -118,20 +116,59 @@ type FeeCollectorChange @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type FeePercentageChange @entity(immutable: true) {
+type GlobalCreationFeeChange @entity(immutable: true) {
   id: Bytes!
-  feePercentage: BigInt! # uint64
-  feePenality: BigInt! # uint64
+  newValue: BigInt! # uint64
+  validSince: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type RaffleCustomFee @entity(immutable: true) {
+type GlobalPoolFeeChange @entity(immutable: true) {
   id: Bytes!
-  raffle: Raffle!
-  enabled: Boolean!
-  feePercentage: BigInt! # uint64
+  newValue: BigInt! # uint64
+  validSince: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CustomCreationFeeChange @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes!
+  newValue: BigInt! # uint64
+  validSince: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CustomCreationFeeToggle @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes!
+  newState: Boolean!
+  validSince: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CustomPoolFeeChange @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes!
+  newValue: BigInt! # uint64
+  validSince: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type CustomPoolFeeToggle @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes!
+  newState: Boolean!
+  validSince: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
