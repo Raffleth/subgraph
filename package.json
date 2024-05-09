@@ -13,7 +13,9 @@
     "clean": "rm -rf .turbo node_modules",
     "codegen": "graph codegen --output-dir src/types/",
     "build:sepolia": "graph build --network sepolia",
-    "deploy:sepolia": "pnpm build:sepolia && graph deploy --studio raffl-v1-sepolia"
+    "deploy:sepolia": "pnpm build:sepolia && graph deploy --studio raffl-v1-sepolia",
+    "build:arbitrum": "graph build --network arbitrum-one",
+    "deploy:arbitrum": "pnpm build:arbitrum && graph deploy --studio raffl-v1-arbitrum"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.71.1",

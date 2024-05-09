@@ -4,5 +4,11 @@
       "address": "0xa0e52B7A4151C3904c7aA1A7531c6E7045E7CdfE",
       "startBlock": 5852043
     }
+  },
+  "arbitrum-one": {
+    "RafflFactory": {
+      "address": "0xB2517F68553C7350eebd85C61a03F42815defF85",
+      "startBlock": 209592082
+    }
   }
 }
