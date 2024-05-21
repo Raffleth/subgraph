@@ -40,6 +40,7 @@ export function setTokenGate(raffleAddress: Address): void {
       finished = true
     } else {
       addTokenGate(raffleAddress, tokenGatesCall.value, i)
+      i++
     }
   }
 }
