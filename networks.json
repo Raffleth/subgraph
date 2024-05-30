@@ -10,5 +10,11 @@
       "address": "0xB2517F68553C7350eebd85C61a03F42815defF85",
       "startBlock": 209592082
     }
+  },
+  "matic": {
+    "RafflFactory": {
+      "address": "0xB2517F68553C7350eebd85C61a03F42815defF85",
+      "startBlock": 57569641
+    }
   }
 }

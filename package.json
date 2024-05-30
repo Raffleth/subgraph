@@ -15,7 +15,9 @@
     "build:sepolia": "graph build --network sepolia",
     "deploy:sepolia": "pnpm build:sepolia && graph deploy --studio raffl-v1-sepolia",
     "build:arbitrum": "graph build --network arbitrum-one",
-    "deploy:arbitrum": "pnpm build:arbitrum && graph deploy --studio raffl-v1-arbitrum"
+    "deploy:arbitrum": "pnpm build:arbitrum && graph deploy --studio raffl-v1-arbitrum",
+    "build:polygon": "graph build --network matic",
+    "deploy:polygon": "pnpm build:polygon && graph deploy --studio raffl-v1-polygon"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.71.1",
