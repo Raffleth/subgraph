@@ -17,7 +17,9 @@
     "build:arbitrum": "graph build --network arbitrum-one",
     "deploy:arbitrum": "pnpm build:arbitrum && graph deploy --studio raffl-v1-arbitrum",
     "build:polygon": "graph build --network matic",
-    "deploy:polygon": "pnpm build:polygon && graph deploy --studio raffl-v1-polygon"
+    "deploy:polygon": "pnpm build:polygon && graph deploy --studio raffl-v1-polygon",
+    "build:polygon-amoy": "graph build --network polygon-amoy",
+    "deploy:polygon-amoy": "pnpm build:polygon-amoy && graph deploy --studio raffl-v1-polygon-amoy"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.71.1",

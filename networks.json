@@ -16,5 +16,11 @@
       "address": "0xB2517F68553C7350eebd85C61a03F42815defF85",
       "startBlock": 57569641
     }
+  },
+  "polygon-amoy": {
+    "RafflFactory": {
+      "address": "0xA26740A41dDb3DE4092CFFA6c4444A3A95Be9CB0",
+      "startBlock": 7717792
+    }
   }
 }
