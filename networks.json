@@ -1,4 +1,10 @@
 {
+  "base": {
+    "RafflFactory": {
+      "address": "0xa0e52B7A4151C3904c7aA1A7531c6E7045E7CdfE",
+      "startBlock": 19948124
+    }
+  },
   "sepolia": {
     "RafflFactory": {
       "address": "0xa0e52B7A4151C3904c7aA1A7531c6E7045E7CdfE",

@@ -14,6 +14,8 @@
     "codegen": "graph codegen --output-dir src/types/",
     "build:sepolia": "graph build --network sepolia",
     "deploy:sepolia": "pnpm build:sepolia && graph deploy --studio raffl-v1-sepolia",
+    "build:base": "graph build --network base",
+    "deploy:base": "pnpm build:base && graph deploy --studio raffl-v1-base",
     "build:arbitrum": "graph build --network arbitrum-one",
     "deploy:arbitrum": "pnpm build:arbitrum && graph deploy --studio raffl-v1-arbitrum",
     "build:polygon": "graph build --network matic",
